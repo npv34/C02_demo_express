@@ -4,6 +4,8 @@ const path = require('path');
 const router = require('./src/routers/web.router');
 const database = require('./src/models/database')
 const session = require("express-session");
+const livereload = require("connect-livereload");
+
 const PORT = 8000;
 
 const app = express();
@@ -20,11 +22,17 @@ app.set('view engine', 'ejs');
 // setup session
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
+    secret: "keyboardcat",
+    name: "mycookie",
+    resave: true,
     saveUninitialized: true,
-    cookie: { secure: true }
-}))
+    cookie: {
+        secure: false,
+        maxAge: 6000000
+    }
+}));
+app.use(livereload())
+
 // router
 app.use(router);
 
